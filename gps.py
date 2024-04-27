@@ -50,18 +50,27 @@ def decode(coord):
     return deg + " deg " + min + "." + tail + " min"
 
 print("Connecting Port..")
+print("Connecting Port..")
 try:
-    serw = serial.Serial(portwrite, baudrate = 115200, timeout = 1,rtscts=True, dsrdtr=True)
+    serw = serial.Serial(portwrite, baudrate=115200, timeout=1, rtscts=True, dsrdtr=True)
     serw.write('AT+QGPS=1\r'.encode())
     serw.close()
     sleep(1)
-except Exception as e: 
+except Exception as e:
     print("Serial port connection failed.")
     print(e)
 
 print("Receiving GPS data\n")
-ser = serial.Serial(port, baudrate = 115200, timeout = 0.5,rtscts=True, dsrdtr=True)
-while True:
-   data = ser.readline().decode('utf-8')
-   parseGPS(data)
-   sleep(2)
+try:
+    ser = serial.Serial(port, baudrate=115200, timeout=0.5, rtscts=True, dsrdtr=True)
+    while True:
+        if ser.in_waiting > 0:
+            data = ser.readline().decode('utf-8')
+            parseGPS(data)
+        else:
+            print("No data received, waiting...")
+        sleep(2)
+except serial.SerialException as e:
+    print("Serial communication error:", e)
+except Exception as e:
+    print("An unexpected error occurred:", e)
