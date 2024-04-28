@@ -62,7 +62,10 @@ except Exception as e:
 print("Receiving GPS data\n")
 ser = serial.Serial(port, baudrate=115200, timeout=0.5, rtscts=True, dsrdtr=True)
 while True:
-    data = ser.readline().decode('utf-8')
-    print("Data received:", data)  # 打印接收到的数据
-    parseGPS(data)
+    if ser.in_waiting > 0:
+        data = ser.read(ser.in_waiting).decode('utf-8')
+        print("Data received:", data)
+    else:
+        print("Waiting for data...")
     sleep(2)
+
