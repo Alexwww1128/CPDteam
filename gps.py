@@ -1,5 +1,5 @@
-# Sixfab - Reading GPS data with Python
-# 2020
+# CPD spring 2024
+# GPS code
 
 
 from time import sleep
@@ -9,7 +9,7 @@ portwrite = "/dev/ttyUSB2"
 port = "/dev/ttyUSB1"
 
 def parseGPS(data):
-    print(data, end='') #prints raw data
+    print(data, end='') 
     if data[0:6] == "$GPRMC":
         sdata = data.split(",")
         if sdata[2] == 'V':
@@ -17,21 +17,21 @@ def parseGPS(data):
             return
         print("-----Parsing GPRMC-----")
         time = sdata[1][0:2] + ":" + sdata[1][2:4] + ":" + sdata[1][4:6]
-        lat = decode(sdata[3]) #latitude
-        dirLat = sdata[4]      #latitude direction N/S
-        lon = decode(sdata[5]) #longitute
-        dirLon = sdata[6]      #longitude direction E/W
-        speed = sdata[7]       #Speed in knots
-        trCourse = sdata[8]    #True course
-        date = sdata[9][0:2] + "/" + sdata[9][2:4] + "/" + sdata[9][4:6] #date
-        variation = sdata[10]  #variation
-        degreeChecksum = sdata[13] #Checksum
+        lat = decode(sdata[3]) 
+        dirLat = sdata[4]     
+        lon = decode(sdata[5]) 
+        dirLon = sdata[6]      
+        speed = sdata[7]       
+        trCourse = sdata[8]    
+        date = sdata[9][0:2] + "/" + sdata[9][2:4] + "/" + sdata[9][4:6] 
+        variation = sdata[10] 
+        degreeChecksum = sdata[13] 
         dc = degreeChecksum.split("*")
-        degree = dc[0]        #degree
-        checksum = dc[1]      #checksum
+        degree = dc[0]        
+        checksum = dc[1]      
 
-        latitude = lat.split() # parsing latitude
-        longitute = lon.split() # parsing longitute
+        latitude = lat.split() 
+        longitute = lon.split() 
 
         print("\nLatitude: " + str(int(latitude[0]) + (float(latitude[2])/60)) + dirLat) 
 
